@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 
 export default function GithubUsers() {
-  const [users, setUsers] = useState([
-    { id: 1, name: "shankar", website: "123@123.com" },
-    { id: 2, name: "Rajesh", website: "123@123.com" },
-    { id: 3, name: "raju", website: "123@123.com" },
-  ]);
+  const [users, setUsers] = useState([]);
+  const [filters, setFilters] = useState("");
+
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then((res) => res.json())
@@ -13,9 +11,27 @@ export default function GithubUsers() {
         setUsers(data);
       });
   }, []);
+
+  useEffect(() => {
+    if (users && users.length > 0) {
+      let filter = users.filter((item) => item.username.length > 10);
+      filter.sort(function (a, b) {
+        if (a.name < b.name) {
+          return -1;
+        }
+        if (a.name > b.name) {
+          return 1;
+        }
+        return 0;
+      });
+      setFilters([...filters, ...filter]);
+    }
+  }, [users]);
+
   const addUser = () => {
     let newUser = { id: 1, name: "shankar", website: "123@123.com" };
     fetch("https://jsonplaceholder.typicode.com/users", {
+      headers: {},
       method: "POST",
       body: JSON.stringify(newUser),
     })
@@ -37,9 +53,9 @@ export default function GithubUsers() {
       });
   };
 
-  const deleteUser = () => {
+  const deleteUser = (user) => {
     //let newUser = { id: 1, name: "shankar", website: "123@123.com" };
-    fetch("https://jsonplaceholder.typicode.com/users/10", {
+    fetch(`https://jsonplaceholder.typicode.com/users/${user.id}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
@@ -61,18 +77,29 @@ export default function GithubUsers() {
       </button>
 
       <div className="d-flex justify-content-center flex-wrap">
-        {users.map((user) => (
-          <div className="m-3 p-3">
-            <img src="./logo192.png" alt="profile"></img>
-            <ul>
-              <li>{user.name}</li>
-            </ul>
+        {filters &&
+          filters.map((user) => (
+            <div className="m-3 p-3">
+              <img src="./logo192.png" alt="profile"></img>
+              <ul>
+                <li>{user.name}</li>
+                <li>
+                  <button
+                    className="p-2"
+                    onClick={() => {
+                      deleteUser(user);
+                    }}
+                  >
+                    delete User
+                  </button>
+                </li>
+              </ul>
 
-            <a href={`http://${user.website}`} target="_blank">
-              Website Link
-            </a>
-          </div>
-        ))}
+              <a href={`http://${user.website}`} target="_blank">
+                Website Link
+              </a>
+            </div>
+          ))}
       </div>
     </div>
   );

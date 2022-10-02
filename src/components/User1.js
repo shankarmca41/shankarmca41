@@ -30,7 +30,7 @@ export default function User1() {
       .catch((err) => {
         console.log(err);
       });
-  });
+  }, [users]);
 
   return (
     <div>
@@ -40,18 +40,19 @@ export default function User1() {
         style={{ textAlign: "center" }}
       ></p>
       <div className="d-flex justify-content-center flex-wrap">
-        {users.map((user) => (
-          <div className="m-3 p-3">
-            <img src="./logo192.png" alt="profile"></img>
-            <ul>
-              <li>{user.name}</li>
-            </ul>
+        {users &&
+          users.map((user) => (
+            <div className="m-3 p-3">
+              <img src="./logo192.png" alt="profile"></img>
+              <ul>
+                <li>{user.name}</li>
+              </ul>
 
-            <a href={`http://${user.website}`} target="_blank">
-              Website Link
-            </a>
-          </div>
-        ))}
+              <a href={`http://${user.website}`} target="_blank">
+                Website Link
+              </a>
+            </div>
+          ))}
       </div>
     </div>
   );
