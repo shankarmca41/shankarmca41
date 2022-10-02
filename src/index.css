@@ -1,5 +1,12 @@
-.betterview{
-  padding: 10px;
-  margin: 10px;
-  border: 1px solid black ;
+.navbar{
+    display: flex;
+    flex-direction: row;
+    border: 2px solid black;
+    padding: 10px;
+    margin:10px;
 }
+.nav-link{
+    text-decoration: none;
+    padding: 10px;
+}
+@import 'D:\react\my\node_modules\bootstrap\dist\css\bootstrap-grid.min.css'
